@@ -1,0 +1,17 @@
+service: dark-mirror-wn-bbc
+
+provider:
+  name: kubeless
+  runtime: python3.6
+
+plugins:
+  - serverless-kubeless
+
+functions:
+  bbc-news:
+    handler: handler.get_news
+
+package:
+  exclude:
+    - node_modules/**
+    - venv/**

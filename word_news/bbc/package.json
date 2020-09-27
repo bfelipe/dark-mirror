@@ -1,0 +1,15 @@
+{
+  "name": "dark-mirror-wn-bbc",
+  "version": "1.0.0",
+  "description": "Function lambda to fetch data from BBC world news feed.",
+  "dependencies": {
+    "serverless-kubeless": "^0.10.2"
+  },
+  "main": "handler.py",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/bfelipe/dark-mirror.git"
+  },
+  "author": "Bruno Felipe",
+  "homepage": "https://gitlab.com/bfelipe/dark-mirror#README"
+}
