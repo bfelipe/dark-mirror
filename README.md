@@ -72,6 +72,34 @@ To do that you must execute:
 
 The function you just deployed should be listed there with a generated code.
 
+## Exposing our function
+
+We already have our function deployed, but still we need to expose it to be able to call from an dns url. You still can test your function following the same steps described at "Testing serverless function", but let's make it something easy to access and handle for our users.
+First lets create a trigger for our functions. Righ now kubeless has tree types of triggers(http, cronjob and pubsub), once you create a trigger, kubeless will handle to create an ingress for your function, so no need to write an yaml file for that.
+
+    kubeless trigger <trigger-type> create <trigger-name> -n <namespace> --function-name <function-name> --hostname <dns> --path <ex. hello>
+
+Now you can check if your function was exposed by typing:
+
+    kubectl get ing -n <namespace>
+
+For get more information about your function you can use:
+
+    kubectl describe ing <ingress-name> -n <namespace>
+
+Here ingress-name usually take the same name as the trigger you named your function.
+
+or
+    kubectl logs -n kubeless -l kubeless=controller -c http-trigger-controller
+    curl --header "Content-Type:application/json" 172.17.0.2/dark-mirror
+
+If everything is up and running fine, you now can call your function using:
+
+    curl --header "Content-Type:application/json" dns/path
+
+**IMPORTANT:** If you provide a domain.name when you created your function you should also register it in your /etc/hosts file. Otherwise you will not be able to call your function.
+You can get the ip for your dns using the same command to get ingress information.
+
 ## Testing serverless functions
 
 There are two ways to test your function once you actually finish the deploy.
@@ -91,11 +119,9 @@ to add '--data' with the actual data you want to send to the lambda function.
 
 ## To Do
 
-- Write docs about how to expose lambda function to external calls with ingress
 - Add the new york times get news function
 - Add the guardian get news function
 - Add the new york times get news function
 - Add accuWeather function
 - Add spotify random playlist function
-- Add script for declarative ci/cd using gilab
 - Add approach to handle unit tests
