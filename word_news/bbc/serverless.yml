@@ -3,6 +3,7 @@ service: dark-mirror-wn-bbc
 provider:
   name: kubeless
   runtime: python3.6
+  namespace: default
 
 plugins:
   - serverless-kubeless
