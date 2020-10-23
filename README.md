@@ -74,37 +74,49 @@ The function you just deployed should be listed there with a generated code.
 
 ## Exposing our function
 
-We already have our function deployed, but still we need to expose it to be able to call from an dns url. You still can test your function following the same steps described at "Testing serverless function", but let's make it something easy to access and handle for our users.
-First lets create a trigger for our functions. Righ now kubeless has tree types of triggers(http, cronjob and pubsub), once you create a trigger, kubeless will handle to create an ingress for your function, so no need to write an yaml file for that.
+We already have our function deployed, but still we need to expose them to be able to request from an url. You still can test your function following the same steps described at "Testing serverless function", but let's make it something easy to access and handle.
+First lets create a trigger for our functions. Righ now kubeless has tree types of triggers(http, cronjob and pubsub), once you create a trigger, kubeless will handle to create an ingress object for your function, so no need to write any yaml file for that.
+To expose your function you should type in your console:
 
-    kubeless trigger <trigger-type> create <trigger-name> -n <namespace> --function-name <function-name> --hostname <dns> --path <ex. hello>
+    kubeless trigger <trigger-type> create <trigger-name> -n <namespace> --function-name <function-name> --hostname <ex. my-domain.io> --path <ex. hello>
 
-Now you can check if your function was exposed by typing:
+**IMPORTANT:** For your path, you do not need to specify / before your path name.
+
+Now you can check if your function has been exposed by typing:
 
     kubectl get ing -n <namespace>
 
-For get more information about your function you can use:
+You going to see something similar to that:
 
-    kubectl describe ing <ingress-name> -n <namespace>
+    NAME                HOSTS           ADDRESS      PORTS   AGE
+    <function-name>     my-domain.io    000.00.0.0   80      00s
 
-Here ingress-name usually take the same name as the trigger you named your function.
+
+For more information about your function you can use:
+
+    kubectl describe ing <trigger-name> -n <namespace>
 
 or
     kubectl logs -n kubeless -l kubeless=controller -c http-trigger-controller
-    curl --header "Content-Type:application/json" 172.17.0.2/dark-mirror
 
-If everything is up and running fine, you now can call your function using:
 
-    curl --header "Content-Type:application/json" dns/path
+If you are running locally in your machine, you should configure /etc/hosts with the same info you used to create your trigger.
 
-**IMPORTANT:** If you provide a domain.name when you created your function you should also register it in your /etc/hosts file. Otherwise you will not be able to call your function.
-You can get the ip for your dns using the same command to get ingress information.
+    ex. /etc/hosts
+
+    000.000.0.0     my-domain.io
+
+
+Now you can call your function using the follor curl, or just typing the same url into your browser:
+
+    curl --header "Content-Type:application/json" http://<hostname>/<path>
+
 
 ## Testing serverless functions
 
-There are two ways to test your function once you actually finish the deploy.
+There are two ways to test your function without exposing it.
 
-The first way, you can simply invoke it using serverless framework by typing into your console
+The first way, you can simply invoke it by using serverless framework, typing into your console:
 
     serverless invoke --function <function-name> --log
 
@@ -114,14 +126,11 @@ The second way is by calling your function using kubeless cli.
 
     kubeless function call <function-name>
 
-In bothe case if your function is expencting to get an input data, everything you need to do is
+In both cases if your function is expencting to get an input data, everything you need to do is
 to add '--data' with the actual data you want to send to the lambda function.
 
 ## To Do
 
-- Add the new york times get news function
-- Add the guardian get news function
-- Add the new york times get news function
-- Add accuWeather function
+- Add the guardian get_news function
+- Add the new york times get_news function
 - Add spotify random playlist function
-- Add approach to handle unit tests
