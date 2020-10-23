@@ -1,0 +1,19 @@
+service: dark-mirror-weather-umbrella
+
+provider:
+  name: kubeless
+  runtime: python3.6
+  namespace: default
+
+plugins:
+  - serverless-kubeless
+
+functions:
+  umbrella:
+    handler: handler.get_forecast
+    environment: ${file(./variables.yml)}
+    
+package:
+  exclude:
+    - node_modules/**
+    - venv/**

@@ -1,0 +1,15 @@
+{
+  "name": "dark-mirror-weather-umbrella",
+  "version": "1.0.0",
+  "description": "Function lambda to fetch 24 hours forecast data from accuweather apis.",
+  "dependencies": {
+    "serverless-kubeless": "^0.11.0"
+  },
+  "main": "handler.py",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/bfelipe/dark-mirror.git"
+  },
+  "author": "Bruno Felipe",
+  "homepage": "https://gitlab.com/bfelipe/dark-mirror#README"
+}
